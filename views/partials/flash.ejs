@@ -1,0 +1,34 @@
+<% if (success && success.length) { %>
+  <div class="alert alert-success alert-dismissible fade show animated-alert" role="alert">
+    <%= success %>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>  
+<% } %>
+
+<% if (error && error.length) { %>
+  <div class="alert alert-danger alert-dismissible fade show animated-alert" role="alert">
+    <%= error %>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>  
+<% } %>
+
+<style>
+/* Slide-in animation for alert */
+  @keyframes slideIn {
+    from {
+      transform: translateY(-50%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+
+  /* Animation for the alert */
+  .animated-alert {
+    animation: slideIn 1s ease-out;
+  }
+
+</style>

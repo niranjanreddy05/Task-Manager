@@ -1,0 +1,135 @@
+<% layout('layouts/boilerplate.ejs') %>
+
+<div class="container my-4" style="animation: fadeIn 1s ease-out;">
+  <div class="row">
+    <!-- Team Details Section -->
+    <div class="col-md-6 mb-4" style="animation: slideInLeft 1s ease-out;">
+      <div class="card shadow-sm p-3">
+        <h4 class="mb-3">Team Details</h4>
+        <p style="margin-bottom: 0px;"><strong>Name:</strong> <%= team.name %></p>
+        <p><strong>Lead:</strong> <%= team.leader.username %></p>
+        <div class="card mt-3">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item"><b>Members:</b></li>
+            <% for(let member of team.members) { %>
+              <li class="list-group-item"><%= member.username %></li>
+            <% } %>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Task Section -->
+    <div class="col-md-6 mb-4" style="animation: slideInRight 1s ease-out;">
+      <div class="card shadow-sm p-3">
+        <h4 class="mb-3 text-center">Add Task</h4>
+        <form action="/teams/<%= id %>/tasks" method="post">
+          <div class="mb-3">
+            <label for="task" class="form-label">Task</label>
+            <input type="text" name="task" id="task" class="form-control">
+          </div>
+          <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <input type="text" name="description" id="description" class="form-control">
+          </div>
+          <button class="btn btn-primary w-100" style="animation: pulse 2s;">Add Task</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tasks List Section -->
+  <div class="container mb-4" style="animation: fadeIn 1.5s ease-out;">
+    <h4 class="mb-3">Tasks</h4>
+    <div class="row g-2">
+      <% for (let task of tasks) { %>
+        <div class="col-12 col-md-6 col-lg-4 mb-2" style="animation: slideUp 1s ease-out;">
+          <div class="card shadow-sm" style="display: flex; flex-direction: column; height: 100%;">
+            <div class="card-body" style="flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+              <div class="view-mode">
+                <h5 class="card-title"><%= task.task %></h5>
+                <p class="card-text"><%= task.description %></p>
+                <p class="card-text"> - <%= task.owner.username %></p>
+                <% if(currentUser.username === task.owner.username) { %>
+                  <div class="d-flex" style="margin-top: auto;">
+                    <button class="btn btn-outline-primary me-2 h-25" onclick="editTask('<%= task._id %>')">Edit</button>
+                    <form style="display: inline;" action="/tasks/<%= task._id %>/delete?_method=DELETE" method="POST">
+                      <button class="btn btn-outline-danger">Delete</button>
+                    </form>
+                  </div>
+                <% } %>
+              </div>
+              <div class="edit-mode d-none" style="margin-top: auto;">
+                <form action="/tasks/<%= task._id %>/edit?_method=PUT" method="POST" style="display: inline;">
+                  <input type="text" class="form-control mb-2" value="<%= task.task %>" id="task-title-<%= task._id %>" name="task">
+                  <textarea class="form-control mb-2" id="task-desc-<%= task._id %>" name="description"><%= task.description %></textarea>
+                  <button class="btn btn-success mb-2" onclick="saveTask('<%= task._id %>')">Save</button>
+                </form>
+                <button class="btn btn-secondary" onclick="cancelEdit('<%= task._id %>')">Cancel</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% } %>
+    </div>
+  </div>
+</div>
+
+<script>
+  function editTask(taskId) {
+    const cardBody = document.querySelector(`#task-title-${taskId}`).closest('.card-body');
+    cardBody.querySelector('.view-mode').classList.add('d-none');
+    cardBody.querySelector('.edit-mode').classList.remove('d-none');
+  }
+
+  function saveTask(taskId) {
+    const taskTitle = document.querySelector(`#task-title-${taskId}`).value;
+    const taskDesc = document.querySelector(`#task-desc-${taskId}`).value;
+
+    const cardBody = document.querySelector(`#task-title-${taskId}`).closest('.card-body');
+    cardBody.querySelector('.view-mode .card-title').innerText = taskTitle;
+    cardBody.querySelector('.view-mode .card-text').innerText = taskDesc;
+
+    cardBody.querySelector('.edit-mode').classList.add('d-none');
+    cardBody.querySelector('.view-mode').classList.remove('d-none');
+  }
+
+  function cancelEdit(taskId) {
+    const cardBody = document.querySelector(`#task-title-${taskId}`).closest('.card-body');
+    cardBody.querySelector('.edit-mode').classList.add('d-none');
+    cardBody.querySelector('.view-mode').classList.remove('d-none');
+  }
+</script>
+
+<style>
+  /* Fade in animation */
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* Slide in from left animation */
+  @keyframes slideInLeft {
+    from { transform: translateX(-100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+
+  /* Slide in from right animation */
+  @keyframes slideInRight {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+
+  /* Slide up animation */
+  @keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  /* Pulse animation */
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+  }
+</style>

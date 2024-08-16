@@ -1,0 +1,69 @@
+<% layout('layouts/boilerplate.ejs') %>
+
+<!-- Header Section with Animation -->
+<div class="container" style="animation: fadeIn 1s ease-out;">
+  <div class="d-flex align-items-center justify-content-between mb-5">
+    <h1 class="mb-0">Teams</h1>
+    <div>
+      <form action="/createTeam" method="get" class="d-inline">
+        <button class="btn btn-primary" style="animation: pulse 2s;">Create Team</button>
+      </form>
+      <form action="/joinTeam" method="get" class="d-inline ms-2">
+        <button class="btn btn-outline-primary" style="animation: pulse 2s;">Join Team</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Teams List Section with Animation -->
+<div class="container mb-5" style="animation: fadeIn 1.5s ease-out;">
+  <h4 class="mb-4 text-muted"><b>Your Teams</b></h4>
+  <% if(user.teams.length > 0) { %>
+    <% for(team of user.teams) { %>
+      <div class="card shadow-sm mb-4" style="animation: slideUp 0.5s ease-out;">
+        <div class="card-body">
+          <div class="d-flex align-items-center justify-content-between">
+            <div>
+              <h5 class="card-title mb-1"><b><%= team.name %></b></h5>
+              <p class="text-muted mb-0"><b>Team ID:</b> <%= team.uniqueId %></p>
+            </div>
+            <div class="d-flex">
+              <form action="/teamIndex/<%= team.uniqueId %>" method="get">
+                <button class="btn btn-primary me-2">View</button>
+              </form>
+              <form action="/teams/<%= team.uniqueId %>/leave?_method=DELETE" method="post">
+                <button class="btn btn-danger">Leave</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% } %>
+  <% } else { %>
+    <div class="alert alert-warning" role="alert" style="animation: fadeIn 2s ease-out;">
+      You are not a member of any teams yet.
+    </div>
+  <% } %>
+</div>
+
+<!-- Styles and Animations -->
+<style>
+  /* Fade in animation */
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* Slide up animation */
+  @keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  /* Pulse animation for buttons */
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+  }
+</style>

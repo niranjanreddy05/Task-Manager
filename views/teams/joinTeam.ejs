@@ -1,0 +1,43 @@
+<% layout('layouts/boilerplate.ejs') %>
+<div class="container" style="width: 350px; animation: fadeIn 1s ease-out;">
+  <div class="row d-table w-100">
+    <div class="col d-table-cell align-middle text-center" style="animation: slideIn 0.5s ease-out;">
+      <h1 class="mb-4">Join Team</h1>
+      <form action="/joinTeam" method="post" class="form-control shadow p-4" style="animation: slideUp 0.5s ease-out;">
+        <div class="mb-3 d-flex flex-column">
+          <label for="uniqueId" class="form-label me-auto">Team ID</label>
+          <input type="text" name="uniqueId" id="uniqueId" class="form-control mb-2" style="width: 310px; margin: 0 auto;" placeholder="Enter team ID" required>
+        </div>
+        <button class="btn btn-primary mb-2 w-100" style="animation: pulse 1s;">Join Team</button>
+      </form>
+      <p class="mt-3">Want to create a team? <a href='/createTeam' class="text-primary">Click here</a></p>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Fade in animation */
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* Slide in from the bottom animation */
+  @keyframes slideIn {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  /* Slide up animation */
+  @keyframes slideUp {
+    from { transform: translateY(10px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  /* Pulse animation for button */
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+  }
+</style>

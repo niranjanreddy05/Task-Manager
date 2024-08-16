@@ -1,0 +1,48 @@
+<% layout('layouts/boilerplate.ejs') %>
+
+<div class="container mt-5" style="animation: fadeIn 1s ease-out;">
+  <form class="form-control shadow p-4" method="POST" action="/tasks/new" style="animation: slideIn 0.5s ease-out;">
+    <div class="mb-3">
+      <label for="task" class="form-label">Task</label>
+      <input type="text" class="form-control" id="task" aria-describedby="taskHelp" name="task" placeholder="Enter your task" required>
+    </div>
+    <div class="mb-3">
+      <label for="description" class="form-label">Description</label>
+      <textarea class="form-control" id="description" name="description" rows="3" placeholder="Describe your task" required></textarea>
+    </div>
+    <div class="d-flex justify-content-center">
+      <button type="submit" class="btn btn-primary w-50" style="animation: expand 0.5s ease-out;">Submit</button>
+    </div>
+  </form>
+</div>
+
+
+<style>
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes slideIn {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  @keyframes expand {
+    from { transform: scale(0.95); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+
+  .container {
+    max-width: 600px;
+  }
+
+  .form-control {
+    background: #f9f9f9;
+    border-radius: 8px;
+  }
+
+  .form-label {
+    font-weight: bold;
+  }
+</style>

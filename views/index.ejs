@@ -1,0 +1,109 @@
+<% layout('layouts/boilerplate.ejs') %>
+
+<% if(tasks.length === 0) { %>
+  <div class="container d-flex justify-content-center align-items-center flex-column text-center mt-5" style="animation: fadeIn 1s ease-out;">
+    <h1 class="mb-4 text-muted">Nothing to do!!</h1>
+    <form action="/tasks/new" method="get">
+      <button class="btn btn-success btn-lg">Add Task</button>
+    </form>
+  </div>
+<% } %>
+
+<% if(tasks.length !== 0) { %>
+  <div class="container mb-4" style="animation: fadeIn 1s ease-out;">
+    <div class="d-flex justify-content-between align-items-center">
+      <h2>Your Tasks</h2>
+      <form action="/tasks/new" method="get">
+        <button class="btn btn-primary">Add Task</button>
+      </form>
+    </div>
+  </div>
+<% } %>
+
+<div class="container">
+  <div class="row g-3">
+    <% for (let task of tasks) { %>
+      <div class="col-md-6 col-lg-4" style="animation: slideIn 0.5s ease-out;">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <div class="view-mode">
+              <h5 class="card-title"><%= task.task %></h5>
+              <p class="card-text"><%= task.description %></p>
+              <div class="d-flex justify-content-between">
+                <button class="btn btn-outline-primary h-25" onclick="editTask('<%= task._id %>')">Edit</button>
+                <form action="/tasks/<%= task._id %>/delete?_method=DELETE" method="POST">
+                  <button class="btn btn-outline-danger">Delete</button>
+                </form>
+              </div>
+            </div>
+            <div class="edit-mode d-none">
+              <form action="/tasks/<%= task._id %>/edit?_method=PUT" method="POST">
+                <div class="mb-2">
+                  <input type="text" class="form-control" value="<%= task.task %>" id="task-title-<%= task._id %>" name="task">
+                </div>
+                <div class="mb-2">
+                  <textarea class="form-control" id="task-desc-<%= task._id %>" name="description"><%= task.description %></textarea>
+                </div>
+                <div class="d-flex justify-content-between">
+                  <button class="btn btn-success" onclick="saveTask('<%= task._id %>')">Save</button>
+                  <button type="button" class="btn btn-secondary" onclick="cancelEdit('<%= task._id %>')">Cancel</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% } %>
+  </div>
+</div>
+
+<script>
+  function editTask(taskId) {
+    const cardBody = document.querySelector(`#task-title-${taskId}`).closest('.card-body');
+    cardBody.querySelector('.view-mode').classList.add('d-none');
+    cardBody.querySelector('.edit-mode').classList.remove('d-none');
+  }
+
+  function saveTask(taskId) {
+    const taskTitle = document.querySelector(`#task-title-${taskId}`).value;
+    const taskDesc = document.querySelector(`#task-desc-${taskId}`).value;
+
+    const cardBody = document.querySelector(`#task-title-${taskId}`).closest('.card-body');
+    cardBody.querySelector('.view-mode .card-title').innerText = taskTitle;
+    cardBody.querySelector('.view-mode .card-text').innerText = taskDesc;
+
+    cardBody.querySelector('.edit-mode').classList.add('d-none');
+    cardBody.querySelector('.view-mode').classList.remove('d-none');
+  }
+
+  function cancelEdit(taskId) {
+    const cardBody = document.querySelector(`#task-title-${taskId}`).closest('.card-body');
+    cardBody.querySelector('.edit-mode').classList.add('d-none');
+    cardBody.querySelector('.view-mode').classList.remove('d-none');
+  }
+</script>
+
+<style>
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes slideIn {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  @keyframes expand {
+    from { transform: scale(0.95); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+
+  .card-body {
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+
+  .edit-mode {
+    animation: expand 0.3s ease-out;
+  }
+</style>

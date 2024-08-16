@@ -1,0 +1,44 @@
+<% layout('layouts/boilerplate.ejs') %>
+
+<div class="container d-flex justify-content-center align-items-center">
+  <div class="card shadow-lg p-5" style="max-width: 400px; width: 100%; animation: fadeIn 1s ease-out;">
+    <h1 class="mb-4 text-center" style="animation: slideIn 1s ease-out;">Log In</h1>
+    <form method="POST" action="/login">
+      <div class="mb-4" style="animation: fadeInUp 1s ease-out 0.2s;">
+        <label for="username" class="form-label">Username</label>
+        <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username" required>
+      </div>
+      <div class="mb-4" style="animation: fadeInUp 1s ease-out 0.4s;">
+        <label for="password" class="form-label">Password</label>
+        <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
+      </div>
+      <button type="submit" class="btn btn-outline-primary w-100" style="animation: bounceIn 1s ease-out 0.6s;">Log In</button>
+    </form>
+  </div>
+</div>
+
+<style>
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes slideIn {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  @keyframes fadeInUp {
+    from { transform: translateY(10px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  @keyframes bounceIn {
+    0%, 20%, 40%, 60%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+</style>
